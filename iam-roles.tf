@@ -9,11 +9,11 @@ resource "aws_iam_role" "cross_account_role" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::123456789012:root"  # Replace with actual external account ID
+          AWS = "arn:aws:iam::123456789012:root" # Replace with actual external account ID
         }
         Condition = {
           StringEquals = {
-            "sts:ExternalId" = "unique-external-id-12345"  # Replace with actual external ID
+            "sts:ExternalId" = "unique-external-id-12345" # Replace with actual external ID
           }
           IpAddress = {
             "aws:SourceIp" = var.corporate_ip_range

@@ -1,11 +1,11 @@
 # Lambda function for S3 bucket remediation
 resource "aws_lambda_function" "s3_remediation" {
-  filename         = "s3_remediation.zip"
-  function_name    = "${local.project_name}-s3-remediation"
-  role            = aws_iam_role.lambda_service_role.arn
-  handler         = "index.handler"
-  runtime         = "python3.9"
-  timeout         = 60
+  filename      = "s3_remediation.zip"
+  function_name = "${local.project_name}-s3-remediation"
+  role          = aws_iam_role.lambda_service_role.arn
+  handler       = "index.handler"
+  runtime       = "python3.9"
+  timeout       = 60
 
   environment {
     variables = {
@@ -21,7 +21,7 @@ data "archive_file" "s3_remediation_zip" {
   type        = "zip"
   output_path = "s3_remediation.zip"
   source {
-    content = <<EOF
+    content  = <<EOF
 import json
 import boto3
 import logging
@@ -123,12 +123,12 @@ resource "aws_sns_topic" "compliance_alerts" {
 
 # Lambda function for SNS notifications
 resource "aws_lambda_function" "sns_notifier" {
-  filename         = "sns_notifier.zip"
-  function_name    = "${local.project_name}-sns-notifier"
-  role            = aws_iam_role.lambda_service_role.arn
-  handler         = "index.handler"
-  runtime         = "python3.9"
-  timeout         = 30
+  filename      = "sns_notifier.zip"
+  function_name = "${local.project_name}-sns-notifier"
+  role          = aws_iam_role.lambda_service_role.arn
+  handler       = "index.handler"
+  runtime       = "python3.9"
+  timeout       = 30
 
   environment {
     variables = {
@@ -144,7 +144,7 @@ data "archive_file" "sns_notifier_zip" {
   type        = "zip"
   output_path = "sns_notifier.zip"
   source {
-    content = <<EOF
+    content  = <<EOF
 import json
 import boto3
 import logging

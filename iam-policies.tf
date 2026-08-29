@@ -32,9 +32,9 @@ resource "aws_iam_policy" "mfa_enforcement" {
 # Admin Policy with IP restrictions
 data "aws_iam_policy_document" "admin_policy" {
   statement {
-    sid    = "AllowAllForAdmins"
-    effect = "Allow"
-    actions = ["*"]
+    sid       = "AllowAllForAdmins"
+    effect    = "Allow"
+    actions   = ["*"]
     resources = ["*"]
     condition {
       test     = "IpAddress"

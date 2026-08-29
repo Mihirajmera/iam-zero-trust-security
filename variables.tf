@@ -19,7 +19,7 @@ variable "environment" {
 variable "corporate_ip_range" {
   description = "Corporate IP range for conditional access policies."
   type        = string
-  default     = "203.0.113.0/24"  # RFC 5737 test range - replace with actual corporate IP
+  default     = "203.0.113.0/24" # RFC 5737 test range - replace with actual corporate IP
 }
 
 variable "admin_users" {
