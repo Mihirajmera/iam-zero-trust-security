@@ -148,6 +148,7 @@ data "archive_file" "sns_notifier_zip" {
 import json
 import boto3
 import logging
+import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -177,7 +178,7 @@ def handler(event, context):
             """
             
             sns_client.publish(
-                TopicArn=context.environment['SNS_TOPIC_ARN'],
+                TopicArn=os.environ['SNS_TOPIC_ARN'],
                 Subject=f"Compliance Violation: {rule_name}",
                 Message=message
             )

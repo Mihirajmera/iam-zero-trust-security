@@ -139,6 +139,15 @@ aws lambda list-functions
 terraform destroy -auto-approve
 ```
 
+## 🤖 CI/CD Pipeline
+
+This repository includes a GitHub Actions workflow (`.github/workflows/terraform-ci.yml`) that automatically runs on pushes and pull requests to `master` or `main`.
+
+The pipeline performs:
+- **Terraform Linting**: Checks formatting consistency using `terraform fmt -check`.
+- **Terraform Validation**: Validates the Terraform configuration syntax and schema.
+- **Security Auditing**: Integrates Aqua Security's **Trivy** scan to detect high/critical severity security risks and misconfigurations in the IAM policies, trust relationships, and bucket policies.
+
 ## 💰 Cost Analysis
 
 | Resource | Monthly Cost | Purpose |
