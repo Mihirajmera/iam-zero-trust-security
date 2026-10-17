@@ -1,5 +1,10 @@
 # 🔐 IAM & Zero Trust Security Implementation
 
+[![Terraform CI](https://github.com/Mihirajmera/iam-zero-trust-security/actions/workflows/terraform-ci.yml/badge.svg)](https://github.com/Mihirajmera/iam-zero-trust-security/actions/workflows/terraform-ci.yml)
+[![CodeQL](https://github.com/Mihirajmera/iam-zero-trust-security/actions/workflows/codeql.yml/badge.svg)](https://github.com/Mihirajmera/iam-zero-trust-security/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/Mihirajmera/iam-zero-trust-security/badge)](https://scorecard.dev/viewer/?uri=github.com/Mihirajmera/iam-zero-trust-security)
+[![Release](https://img.shields.io/github/v/release/Mihirajmera/iam-zero-trust-security?color=0891b2)](https://github.com/Mihirajmera/iam-zero-trust-security/releases)
+
 Enterprise-grade IAM implementation with Zero Trust security model, automated compliance monitoring, and self-healing infrastructure
 
 ## 🎯 Project Overview
