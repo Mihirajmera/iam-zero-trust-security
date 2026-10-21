@@ -1,0 +1,105 @@
+# Reviewed exceptions to Checkov findings. Every failed check must be fixed or listed here
+# with a decision, a reason and an expiry; CI fails on anything else, including expired entries.
+#   risk-accepted   - the risk is real, compensating controls are in place, owner accepts it
+#   not-applicable  - the check doesn't apply to this design, or is a scanner false positive
+#   deferred        - should be fixed; tracked with a date
+system: iam-zero-trust-security
+owner: Mihir Ajmera
+reviewed: 2026-10-21
+
+exceptions:
+  - check: CKV_AWS_1
+    resources: [aws_iam_policy_document.admin_policy]
+    decision: risk-accepted
+    reason: Break-glass administrator policy. Usable only with MFA and only from the corporate IP range, attached only to the admins group.
+    expires: 2027-04-21
+  - check: CKV_AWS_49
+    resources: [aws_iam_policy_document.admin_policy]
+    decision: risk-accepted
+    reason: Same break-glass policy as CKV_AWS_1 (MFA and source-IP conditions).
+    expires: 2027-04-21
+  - check: CKV2_AWS_40
+    resources: [aws_iam_policy_document.admin_policy]
+    decision: risk-accepted
+    reason: Same break-glass policy as CKV_AWS_1 (MFA and source-IP conditions).
+    expires: 2027-04-21
+  - check: CKV_AWS_61
+    resources: [aws_iam_role.cross_account_role]
+    decision: risk-accepted
+    reason: Cross-account role trusts one named external account and requires an external ID and the corporate source IP. The account ID is a placeholder to replace on deployment.
+    expires: 2027-04-21
+  - check: CKV2_AWS_14
+    resources: ["*"]
+    decision: not-applicable
+    reason: False positive. Every group has members through aws_iam_group_membership built with a for expression, which Checkov's graph check doesn't resolve (see iam-groups.tf).
+    expires: 2027-04-21
+  - check: CKV2_AWS_21
+    resources: ["*"]
+    decision: not-applicable
+    reason: False positive. Every user is a member of exactly one group through aws_iam_group_membership (see iam-groups.tf).
+    expires: 2027-04-21
+  - check: CKV_AWS_273
+    resources: ["*"]
+    decision: not-applicable
+    reason: This repository demonstrates IAM user, group and MFA controls, so it defines IAM users on purpose. A production rollout would federate through IAM Identity Center.
+    expires: 2027-04-21
+  - check: CKV_AWS_18
+    resources: [aws_s3_bucket.config_bucket]
+    decision: deferred
+    reason: Server access logging for the AWS Config bucket needs a separate log bucket; CloudTrail already records data access.
+    expires: 2027-01-31
+  - check: CKV_AWS_145
+    resources: [aws_s3_bucket.config_bucket]
+    decision: risk-accepted
+    reason: Bucket uses SSE-S3 encryption. A customer-managed KMS key adds key-policy management with little benefit for configuration snapshots.
+    expires: 2027-04-21
+  - check: CKV_AWS_144
+    resources: [aws_s3_bucket.config_bucket]
+    decision: not-applicable
+    reason: Configuration snapshots are reproducible from AWS Config; cross-region replication isn't needed for this data.
+    expires: 2027-04-21
+  - check: CKV2_AWS_61
+    resources: [aws_s3_bucket.config_bucket]
+    decision: deferred
+    reason: Add a lifecycle rule once the evidence retention period is agreed.
+    expires: 2027-01-31
+  - check: CKV2_AWS_62
+    resources: [aws_s3_bucket.config_bucket]
+    decision: not-applicable
+    reason: No downstream consumer needs bucket event notifications; compliance changes already flow through EventBridge.
+    expires: 2027-04-21
+  - check: CKV_AWS_26
+    resources: [aws_sns_topic.compliance_alerts]
+    decision: deferred
+    reason: Enable SSE with the AWS-managed SNS key; alerts carry resource IDs, not data.
+    expires: 2027-01-31
+  - check: CKV_AWS_50
+    resources: ["*"]
+    decision: not-applicable
+    reason: Small event-driven functions; CloudWatch Logs are enough and X-Ray adds cost without diagnostic value here.
+    expires: 2027-04-21
+  - check: CKV_AWS_115
+    resources: ["*"]
+    decision: not-applicable
+    reason: Functions are triggered by low-volume AWS Config events; account concurrency limits are sufficient.
+    expires: 2027-04-21
+  - check: CKV_AWS_116
+    resources: ["*"]
+    decision: deferred
+    reason: Add a dead-letter queue so failed remediations are retained for review.
+    expires: 2027-01-31
+  - check: CKV_AWS_117
+    resources: ["*"]
+    decision: not-applicable
+    reason: Functions only call public AWS APIs (S3, SNS); placing them in a VPC would add NAT cost without reducing exposure.
+    expires: 2027-04-21
+  - check: CKV_AWS_173
+    resources: ["*"]
+    decision: not-applicable
+    reason: Environment variables hold only a bucket name and topic ARN, no secrets; default Lambda encryption at rest applies.
+    expires: 2027-04-21
+  - check: CKV_AWS_272
+    resources: ["*"]
+    decision: deferred
+    reason: Code signing needs an AWS Signer profile; planned with the move to packaged deployment artifacts.
+    expires: 2027-01-31
