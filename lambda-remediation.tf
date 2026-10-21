@@ -4,7 +4,7 @@ resource "aws_lambda_function" "s3_remediation" {
   function_name = "${local.project_name}-s3-remediation"
   role          = aws_iam_role.lambda_service_role.arn
   handler       = "index.handler"
-  runtime       = "python3.9"
+  runtime       = "python3.12"
   timeout       = 60
 
   environment {
@@ -127,7 +127,7 @@ resource "aws_lambda_function" "sns_notifier" {
   function_name = "${local.project_name}-sns-notifier"
   role          = aws_iam_role.lambda_service_role.arn
   handler       = "index.handler"
-  runtime       = "python3.9"
+  runtime       = "python3.12"
   timeout       = 30
 
   environment {

@@ -84,21 +84,17 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# Additional permissions for Lambda remediation
+# Permissions for Lambda remediation: exactly the two calls the function makes
+# (put_public_access_block, delete_bucket_policy), on S3 buckets only.
 data "aws_iam_policy_document" "lambda_remediation_policy" {
   statement {
-    sid    = "AllowConfigRemediation"
+    sid    = "AllowS3PublicAccessRemediation"
     effect = "Allow"
     actions = [
-      "config:PutEvaluations",
       "s3:PutBucketPublicAccessBlock",
-      "s3:PutBucketAcl",
-      "s3:PutBucketPolicy",
-      "ec2:ModifyInstanceAttribute",
-      "ec2:StopInstances",
-      "ec2:TerminateInstances"
+      "s3:DeleteBucketPolicy"
     ]
-    resources = ["*"]
+    resources = ["arn:aws:s3:::*"]
   }
 }
 

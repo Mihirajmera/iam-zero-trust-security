@@ -29,10 +29,11 @@ resource "aws_iam_policy" "mfa_enforcement" {
   tags = local.tags
 }
 
-# Admin Policy with IP restrictions
+# Break-glass admin policy: full access, but only with MFA and only from the corporate
+# network. Recorded as an accepted risk in compliance/exceptions.yaml.
 data "aws_iam_policy_document" "admin_policy" {
   statement {
-    sid       = "AllowAllForAdmins"
+    sid       = "AllowAllForAdminsWithMfaFromCorporateNetwork"
     effect    = "Allow"
     actions   = ["*"]
     resources = ["*"]
@@ -40,6 +41,11 @@ data "aws_iam_policy_document" "admin_policy" {
       test     = "IpAddress"
       variable = "aws:SourceIp"
       values   = [var.corporate_ip_range]
+    }
+    condition {
+      test     = "Bool"
+      variable = "aws:MultiFactorAuthPresent"
+      values   = ["true"]
     }
   }
 }
